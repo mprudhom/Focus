@@ -11,10 +11,10 @@ import Focus
 // A user example
 // an example of why we need SYB, Generics or macros
 public class User {
-	var name : String
-	var age : Int
-	var tweets : [String]
-	var attr : String
+	public internal(set) var name : String
+	public internal(set) var age : Int
+	public internal(set) var tweets : [String]
+	public internal(set) var attr : String
 	
 	public init(_ n : String, _ a : Int, _ t : [String], _ r : String) {
 		name = n
