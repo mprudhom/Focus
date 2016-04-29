@@ -34,10 +34,12 @@ public func ==(lhs : User, rhs : User) -> Bool {
 }
 
 protocol Focusable {
+	associatedtype Focal = Self
 }
 
 extension Focusable {
-	static func lens<T>(getter: Self -> T, _ setter: (inout Self, T) -> Void) -> Lens<Self, Self, T, T> {
+	/// Points the Focal, creatng a lens on the `var` property
+	static func point<T>(getter: Self -> T, _ setter: (inout Self, T) -> Void) -> Lens<Self, Self, T, T> {
 		return Lens(get: getter, set: { this, value in
 			var this = this
 			setter(&this, value)
@@ -47,8 +49,13 @@ extension Focusable {
 }
 
 extension User : Focusable {
-	static let userName = User.lens({ $0.name }, { $0.name = $1 })
-	static let userAge = User.lens({ $0.age }, { $0.age = $1 })
-	static let userTweets = User.lens({ $0.tweets }, { $0.tweets = $1 })
-	static let userAttr = User.lens({ $0.attr }, { $0.attr = $1 })
+	static let userName = Focal.point({ $0.name }, { $0.name = $1 })
+	static let userAge = Focal.point({ $0.age }, { $0.age = $1 })
+	static let userTweets = Focal.point({ $0.tweets }, { $0.tweets = $1 })
+	static let userAttr = Focal.point({ $0.attr }, { $0.attr = $1 })
+}
+
+extension Party : Focusable {
+	// if `host` were a `var`, we could also do this:
+	// static let partyHost = Focal.point({ $0.host }, { $0.host = $1 })
 }
